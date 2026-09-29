@@ -4,13 +4,23 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from tools import web_search , scrape_url 
 from dotenv import load_dotenv
+import os
+from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 
 load_dotenv()
 
 #model setup 
-model = ChatMistralAI(model="mistral-medium-3-5", api_key="h7Cwl8Nbb76Q76Bu2VgPhichCgtD6P43")
 
 
+llm = HuggingFaceEndpoint(
+    repo_id="Qwen/Qwen3-8B",
+    huggingfacehub_api_token=os.getenv("HF_TOKEN"),  # the variable NAME
+    task="text-generation",
+    max_new_tokens=32768,
+    temperature=0.8,
+)
+
+model = ChatHuggingFace(llm=llm)
 
 #1st agent 
 def build_search_agent():
